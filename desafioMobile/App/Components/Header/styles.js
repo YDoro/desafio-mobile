@@ -11,9 +11,10 @@ const styles = StyleSheet.create({
   },
   menu: {
     color: '#FFF',
-    transform: [{scale: 1.5}],
+    transform: [{scale: 2.5}],
   },
-  icon: {color: '#FFF', transform: [{scale: 1.5}]},
+  iconDiv:{margin:5},
+  icon: {color: '#FFF', transform: [{scale:2.5}]},
   HeaderBody: {
     position: 'relative',
     backgroundColor: '#333',

@@ -35,11 +35,7 @@ class Home extends Component {
 
         <ScrollView>
           
-          <StatusBar
-            backgroundColor="#333"
-            barStyle="light-content"
-            animated={true}
-          />
+          
            <View >
           <Text>Teste</Text>
         </View>
