@@ -74,7 +74,7 @@ class Home extends Component {
           />
 
           <ScrollView>
-            <View style={{width: '100%',alignSelf:"center"}}>
+            <View style={{width: '100%',alignSelf:"center",paddingBottom:100}}>
               {this.state.isLoading ? (
                 <ActivityIndicator size="large" style={{alignSelf:"center",marginVertical:Dimensions.get("window").height*0.5}} color="#DDD" />
               ) : (
