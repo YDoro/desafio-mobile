@@ -78,7 +78,7 @@ class Home extends Component {
           <ScrollView>
             <View style={{width: '100%',alignSelf:"center"}}>
               {this.state.isLoading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" style={{alignSelf:"center",marginVertical:Dimensions.get("window").height*0.5}} color="#DDD" />
               ) : (
                 <FlatList
                   data={this.state.produtos}
