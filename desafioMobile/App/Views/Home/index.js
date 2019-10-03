@@ -2,30 +2,14 @@ import React, {Component} from 'react';
 import {Text, View, Alert, Dimensions, ActivityIndicator,Image} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import {Button, Icon, Container, Row} from 'native-base';
-import CustomHeader from '../../Components/Header';
 import {ScrollView, FlatList} from 'react-native-gesture-handler';
 import SideMenu from 'react-native-side-menu';
+import CustomHeader from '../../Components/Header';
 import SideBar from '../../Components/SideBar';
+import ListItemCard from '../../Components/ListItemCard';
 import api from '../../Services/API/index';
 const numColumns = 2;
-function Item({produto}) {
-  return (
-    <View style={{borderWidth:1, width: '48%', borderRadius: 15, margin:"1%"}}>
-       <View>
-        <Image
-          source={{uri: produto.Skus[0].Images[0].ImageUrl}}
-          style={{
-            height: 300,
-            width: 300,
-            transform: [{scale: 0.45}],
-            alignSelf: 'center',
-          }}
-        />
-      </View>
-      <Text style={{paddingHorizontal: 10}}>{produto.Name}</Text>
-    </View>
-  );
-}
+
 class Home extends Component {
   static navigationOptions = {
     header: null,
@@ -57,10 +41,22 @@ class Home extends Component {
         Alert.alert('erro', JSON.stringify(err.response.data));
       });
   };
-  renderItem = produto => {
-    return <Text>{produto.Name}</Text>;
-  };
-
+  buscar = async (Query)=>{
+    this.setState({isLoading:true});
+    await api
+    .post('Search/Criteria', {
+      Query: `${Query}`,
+      Offset: 0,
+      Size: 10,
+    })
+    .then(async response => {
+      console.log(response);
+      this.setState({produtos: response.data.Products, isLoading: false});
+    })
+    .catch(err => {
+      Alert.alert('erro', JSON.stringify(err.response.data));
+    });
+  }
   render() {
     const menu = <SideBar />;
     return (
@@ -73,6 +69,8 @@ class Home extends Component {
           <CustomHeader
             ref="header"
             isOpen={() => this.setState({isOpen: !this.state.isOpen})}
+            search={this.buscar}
+
           />
 
           <ScrollView>
@@ -85,7 +83,7 @@ class Home extends Component {
                   
                   keyExtractor={item => item.Id}
                   numColumns={numColumns}
-                  renderItem={({item}) => <Item produto={item} />}
+                  renderItem={({item}) => <ListItemCard produto={item} />}
                 />
               )}
             </View>

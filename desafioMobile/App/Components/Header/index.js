@@ -9,8 +9,13 @@ export default class CustomHeader extends Component {
     super(props);
     this.state = {
       searching: false,
+      searchText:""
     };
   }
+  search= (text)=>{
+    this.setState({searchText:text});
+        this.props.search(text);
+   }
 
   render() {
     return (
@@ -48,7 +53,13 @@ export default class CustomHeader extends Component {
   <View style={styles.searchBar}>
     <Item rounded bordered style={styles.searchInputIten}>
       <Icon active name='search' style={styles.searchInputIcon} />
-      <Input style={styles.searchInput} />
+      <Input 
+      value={this.state.searchText}
+      style={styles.searchInput} 
+      onChangeText={(text)=>this.search(text)}
+      onEndEditing={()=>this.setState({searching:false})} 
+      onBlur={()=>this.setState({searching:false})}
+      />
     </Item>
   </View>
   
