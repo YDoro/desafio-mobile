@@ -9,12 +9,14 @@ export default class CustomHeader extends Component {
     super(props);
     this.state = {
       searching: false,
-      searchText:""
+      searchText:"",
+      
     };
   }
   search= (text)=>{
     this.setState({searchText:text});
         this.props.search(text);
+     
    }
 
   render() {

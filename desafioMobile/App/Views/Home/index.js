@@ -20,6 +20,9 @@ class Home extends Component {
       isLoading: true,
       isOpen: false,
       produtos: [],
+      Query:'',
+      Offset:0,
+      Size:10
     };
   }
   componentDidMount() {
@@ -27,35 +30,56 @@ class Home extends Component {
     this.getData();
   }
   getData = async () => {
+    this.setState({isLoading:true});
     await api
       .post('Search/Criteria', {
         Query: '',
-        Offset: 0,
-        Size: 10,
+        Offset: this.state.Offset,
+        Size: this.state.itenCount,
       })
       .then(async response => {
         console.log(response);
-        this.setState({produtos: response.data.Products, isLoading: false});
+       this.setState({produtos:this.state.produtos.concat(response.data.Products)})
+        this.setState({isLoading: false});
       })
       .catch(err => {
         Alert.alert('erro', JSON.stringify(err.response.data));
       });
   };
-  buscar = async (Query)=>{
-    this.setState({isLoading:true});
+  refresh = ()=>{
+   this.setState(
+      {
+        Offset:this.state.Offset+this.state.Size,
+    },
+        ()=>this.buscar(this.state.Query,this.state.Offset,this.state.Size));
+  
+
+  }
+  buscar = async (Query,Offset,Size)=>{
+    if(this.state.Query != Query) this.setState({produtos:[]})
+    this.setState({Query});
+  
     await api
     .post('Search/Criteria', {
-      Query: `${Query}`,
-      Offset: 0,
-      Size: 10,
+      Query,
+      Offset,
+      Size
     })
     .then(async response => {
       console.log(response);
-      this.setState({produtos: response.data.Products, isLoading: false});
+      this.setState({produtos:this.state.produtos.concat(response.data.Products)})
     })
     .catch(err => {
       Alert.alert('erro', JSON.stringify(err.response.data));
     });
+  }
+  ListLoad = ()=>{
+    return(
+      
+      <View>
+        <ActivityIndicator size="large" color="#DDD"/>
+      </View>
+    )
   }
   render() {
     const menu = <SideBar />;
@@ -65,7 +89,7 @@ class Home extends Component {
         edgeHitWidth={Dimensions.get('window').width}
         toleranceY={30}
         isOpen={this.state.isOpen}>
-        <View>
+        
           <CustomHeader
             ref="header"
             isOpen={() => this.setState({isOpen: !this.state.isOpen})}
@@ -73,22 +97,26 @@ class Home extends Component {
 
           />
 
-          <ScrollView>
-            <View style={{width: '100%',alignSelf:"center",paddingBottom:100}}>
+          
+           
               {this.state.isLoading ? (
                 <ActivityIndicator size="large" style={{alignSelf:"center",marginVertical:Dimensions.get("window").height*0.5}} color="#DDD" />
               ) : (
                 <FlatList
+                style={{height:"100%"}}
                   data={this.state.produtos}
                   
                   keyExtractor={item => item.Id}
                   numColumns={numColumns}
                   renderItem={({item}) => <ListItemCard produto={item} />}
+                  onEndReached={()=>this.refresh()}
+                  onEndReachedThreshold={0}
+                  ListFooterComponent={this.ListLoad()}
                 />
               )}
-            </View>
-          </ScrollView>
-        </View>
+            
+          
+      
       </SideMenu>
     );
   }
