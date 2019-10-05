@@ -10,12 +10,23 @@ export default class CustomHeader extends Component {
     this.state = {
       searching: false,
       searchText:"",
+      isSearching:false
       
     };
   }
   search= (text)=>{
     this.setState({searchText:text});
-        this.props.search(text);
+    if(text.length==0){
+      this.setState({isSearching:true});
+      this.props.search(text);
+      setTimeout(()=>this.setState({isSearching:false}),2000);
+    }
+    if(text.length>2&&!this.state.isSearching){
+      this.setState({isSearching:true});
+      this.props.search(text);
+      setTimeout(()=>this.setState({isSearching:false}),2000);
+    }
+        
      
    }
 

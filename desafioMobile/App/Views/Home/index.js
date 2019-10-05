@@ -18,6 +18,7 @@ class Home extends Component {
     super(props);
     this.state = {
       isLoading: true,
+      isSearching:false,
       isOpen: false,
       produtos: [],
       Query:'',
@@ -56,9 +57,11 @@ class Home extends Component {
 
   }
   buscar = async (Query,Offset,Size)=>{
+   
+
     if(this.state.Query != Query) this.setState({produtos:[]})
     this.setState({Query});
-  
+
     await api
     .post('Search/Criteria', {
       Query,
@@ -66,12 +69,16 @@ class Home extends Component {
       Size
     })
     .then(async response => {
-      console.log(response);
+      
       this.setState({produtos:this.state.produtos.concat(response.data.Products)})
+ 
     })
     .catch(err => {
       Alert.alert('erro', JSON.stringify(err.response.data));
+   
+      
     });
+
   }
   ListLoad = ()=>{
     return(
@@ -87,13 +94,14 @@ class Home extends Component {
       <SideMenu
         menu={menu}
         edgeHitWidth={Dimensions.get('window').width}
-        toleranceY={30}
+
         isOpen={this.state.isOpen}>
         
           <CustomHeader
             ref="header"
             isOpen={() => this.setState({isOpen: !this.state.isOpen})}
             search={this.buscar}
+          
 
           />
 

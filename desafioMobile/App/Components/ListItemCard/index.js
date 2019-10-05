@@ -61,7 +61,7 @@ class ListItemCard extends Component {
             </Text>
             <Text style={styles.Price}>R$ {xseller.Price.toFixed(2)}</Text>
             <Text style={styles.BestInstallment}>
-              {xseller.BestInstallment.Count}x de R$ {xseller.BestInstallment.Value.toFixed(2)}
+              {xseller.BestInstallment?(xseller.BestInstallment.Count +' de R$ '+ xseller.BestInstallment.Value.toFixed(2)):null}
             </Text>
           </View>
         </View>
