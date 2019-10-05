@@ -68,15 +68,13 @@ class Home extends Component {
       Offset,
       Size
     })
-    .then(async response => {
-      
+    .then( response => {
+     
       this.setState({produtos:this.state.produtos.concat(response.data.Products)})
- 
-    })
+     })
     .catch(err => {
       Alert.alert('erro', JSON.stringify(err.response.data));
-   
-      
+       
     });
 
   }
@@ -88,8 +86,11 @@ class Home extends Component {
       </View>
     )
   }
+  closeSideMenu = ()=>{
+   this.setState({isOpen: false})
+  }
   render() {
-    const menu = <SideBar />;
+    const menu = <SideBar close={this.closeSideMenu} />;
     return (
       <SideMenu
         menu={menu}
@@ -111,7 +112,7 @@ class Home extends Component {
                 <ActivityIndicator size="large" style={{alignSelf:"center",marginVertical:Dimensions.get("window").height*0.5}} color="#DDD" />
               ) : (
                 <FlatList
-                style={{height:"100%"}}
+                style={{height:"100%",backgroundColor:"#FFF"}}
                   data={this.state.produtos}
                   
                   keyExtractor={item => item.Id}
